@@ -112,6 +112,34 @@
     max-height: 100vh;
     box-shadow: -8px 0 24px rgba(0, 0, 0, 0.04);
   }
+  .chat-aside-body {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .chat-panel {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .settings-panel {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 16px;
+    font-size: 12px;
+    color: #444;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    background: #fafafa;
+  }
+  .settings-panel[hidden] {
+    display: none !important;
+  }
+  .chat-panel[hidden] {
+    display: none !important;
+  }
   .chat-head {
     display: flex;
     align-items: center;
@@ -134,16 +162,7 @@
     cursor: pointer;
   }
   .chat-settings-btn:hover { background: #E6E6E6; }
-  .chat-settings {
-    padding: 12px 16px 16px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
-    font-size: 12px;
-    color: #444;
-    flex-shrink: 0;
-    max-height: 42vh;
-    overflow-y: auto;
-  }
-  .chat-field { display: block; margin-bottom: 10px; }
+  .settings-panel-inner .chat-field { display: block; margin-bottom: 10px; }
   .chat-field span { display: block; margin-bottom: 4px; font-weight: 500; color: #333; }
   .chat-field input, .chat-field select, .chat-field textarea {
     width: 100%;
@@ -176,21 +195,76 @@
     padding: 12px 16px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 14px;
     min-height: 0;
   }
-  .chat-msg {
+  .chat-msg-row {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-width: 100%;
+  }
+  .chat-msg-row.user {
+    align-self: flex-end;
+    align-items: flex-end;
+    max-width: 92%;
+  }
+  .chat-msg-row.bot,
+  .chat-msg-row.err {
+    align-self: stretch;
+    align-items: flex-start;
+    max-width: 100%;
+  }
+  .chat-msg-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0 2px;
+  }
+  .chat-msg-row.user .chat-msg-label { color: #2563eb; }
+  .chat-msg-row.bot .chat-msg-label { color: #15803d; }
+  .chat-msg-row.err .chat-msg-label { color: #b91c1c; }
+  .chat-msg-bubble {
     font-size: 13px;
     line-height: 1.55;
     padding: 10px 12px;
-    border-radius: 12px;
-    max-width: 100%;
+    border-radius: 14px;
     white-space: pre-wrap;
     word-break: break-word;
   }
-  .chat-msg.user { align-self: flex-end; background: #E8E8E8; color: #1A1A1A; }
-  .chat-msg.bot { align-self: stretch; background: #F5F5F5; border: 1px solid rgba(0, 0, 0, 0.06); }
-  .chat-msg.err { align-self: stretch; background: #FFF2F2; color: #7a1e1e; border: 1px solid rgba(200, 80, 80, 0.25); }
+  .chat-msg-bubble.user {
+    background: #dbeafe;
+    color: #0f172a;
+    border: 1px solid rgba(37, 99, 235, 0.22);
+    border-radius: 14px 14px 4px 14px;
+  }
+  .chat-msg-bubble.bot {
+    background: #fff;
+    color: #1a1a1a;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 14px 14px 14px 4px;
+    max-width: 100%;
+    max-height: min(42vh, 360px);
+    overflow-y: auto;
+  }
+  .chat-msg-row.user .chat-msg-bubble { max-width: 100%; }
+  .chat-msg-bubble.err {
+    background: #fef2f2;
+    color: #7f1d1d;
+    border: 1px solid rgba(185, 28, 28, 0.28);
+    border-radius: 14px 14px 14px 4px;
+    max-width: 100%;
+  }
+  .chat-msg-bubble.bot.streaming {
+    border-style: dashed;
+    border-color: rgba(21, 128, 61, 0.35);
+    background: #f8faf8;
+    color: #334155;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.5;
+  }
   .chat-form {
     padding: 12px 16px 16px;
     border-top: 1px solid rgba(0, 0, 0, 0.07);
@@ -200,15 +274,18 @@
     flex-shrink: 0;
   }
   .chat-form textarea {
-    resize: vertical;
+    resize: none;
+    overflow-y: hidden;
     min-height: 44px;
-    max-height: 120px;
+    max-height: 200px;
     font: inherit;
     font-size: 13px;
+    line-height: 1.45;
     padding: 10px 12px;
     border-radius: 10px;
     border: 1px solid rgba(0, 0, 0, 0.12);
     background: #FAFAFA;
+    box-sizing: border-box;
   }
   .chat-form button[type="submit"] {
     font: inherit;
@@ -557,33 +634,39 @@
 
 <aside class="chat-aside" id="chat-aside" aria-label="Помощник по карточкам">
   <div class="chat-head">
-    <span class="chat-title">Чат</span>
-    <button type="button" class="chat-settings-btn" id="chat-settings-toggle" aria-expanded="false" aria-controls="chat-settings">Настройки ИИ</button>
+    <span class="chat-title" id="chat-head-title">Чат</span>
+    <button type="button" class="chat-settings-btn" id="chat-settings-toggle" aria-expanded="false" aria-controls="settings-panel">Настройки ИИ</button>
   </div>
-  <div class="chat-settings" id="chat-settings" hidden>
-    <p class="chat-hint" style="margin-bottom:10px">Ollama — бесплатное ПО; модель крутится у вас на компьютере. Со страницы GitHub Pages (HTTPS) запрос к <code>http://127.0.0.1</code> браузер обычно блокирует — укажите HTTPS-URL (например туннель к Ollama) или используйте Gemini.</p>
-    <label class="chat-field">
-      <span>Режим</span>
-      <select id="chat-provider">
-        <option value="gemini">Gemini (ключ из AI Studio)</option>
-        <option value="ollama">Ollama</option>
-      </select>
-    </label>
-    <div id="ollama-block">
-      <label class="chat-field"><span>Базовый URL Ollama</span><input type="url" id="ollama-url" placeholder="https://… или http://127.0.0.1:11434" autocomplete="off"></label>
-      <label class="chat-field"><span>Модель</span><input type="text" id="ollama-model" placeholder="llama3.2" autocomplete="off"></label>
+  <div class="chat-aside-body">
+    <div class="chat-panel" id="chat-panel">
+      <div class="chat-messages" id="chat-messages" role="log"></div>
+      <form class="chat-form" id="chat-form">
+        <textarea id="chat-input" rows="1" placeholder="Опишите тезисы — сгенерирую карточки и подберу иконку (Iconify: Heroicons, Lucide, Tabler, MDI, Carbon, Bootstrap, Font Awesome 6, Remix Icon…)…"></textarea>
+        <button type="submit" id="chat-send">Сгенерировать карточки</button>
+      </form>
     </div>
-    <div id="gemini-block">
-      <label class="chat-field"><span>Ключ Gemini</span><input type="password" id="gemini-key" placeholder="AIza…" autocomplete="off"></label>
-      <p class="chat-hint">Бесплатный ключ: <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a>. Хранится только в вашем браузере.</p>
+    <div class="settings-panel" id="settings-panel" hidden>
+      <div class="settings-panel-inner" id="chat-settings">
+        <p class="chat-hint" style="margin-bottom:10px">Ollama — бесплатное ПО; модель крутится у вас на компьютере. Со страницы GitHub Pages (HTTPS) запрос к <code>http://127.0.0.1</code> браузер обычно блокирует — укажите HTTPS-URL (например туннель к Ollama) или используйте Gemini.</p>
+        <label class="chat-field">
+          <span>Режим</span>
+          <select id="chat-provider">
+            <option value="gemini">Gemini (ключ из AI Studio)</option>
+            <option value="ollama">Ollama</option>
+          </select>
+        </label>
+        <div id="ollama-block">
+          <label class="chat-field"><span>Базовый URL Ollama</span><input type="url" id="ollama-url" placeholder="https://… или http://127.0.0.1:11434" autocomplete="off"></label>
+          <label class="chat-field"><span>Модель</span><input type="text" id="ollama-model" placeholder="llama3.2" autocomplete="off"></label>
+        </div>
+        <div id="gemini-block">
+          <label class="chat-field"><span>Ключ Gemini</span><input type="password" id="gemini-key" placeholder="AIza…" autocomplete="off"></label>
+          <p class="chat-hint">Бесплатный ключ: <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a>. Хранится только в вашем браузере.</p>
+        </div>
+        <button type="button" class="chat-save-btn" id="chat-save-settings">Сохранить в браузере</button>
+      </div>
     </div>
-    <button type="button" class="chat-save-btn" id="chat-save-settings">Сохранить в браузере</button>
   </div>
-  <div class="chat-messages" id="chat-messages" role="log"></div>
-  <form class="chat-form" id="chat-form">
-    <textarea id="chat-input" rows="2" placeholder="Опишите тезисы — сгенерирую карточки и подставлю иконки (Heroicons через Iconify)…"></textarea>
-    <button type="submit" id="chat-send">Сгенерировать карточки</button>
-  </form>
 </aside>
 </div>
 
@@ -600,7 +683,7 @@
     'Ты помощник для вёрстки карточек преимуществ (строительство, полусухая стяжка и т.п.).',
     'По запросу пользователя верни ТОЛЬКО один JSON без Markdown и без пояснений до или после.',
     'Формат: {"cards":[{"title":"краткий заголовок","desc":"1–2 предложения","icon":"имя-иконки"}]}',
-    'Поле icon — имя из набора Heroicons v2 (24px solid), в kebab-case: например bolt, shield-check, truck, clock, map-pin, square-3-stack-3d, funnel, speaker-wave.',
+    'Поле icon — kebab-case, имя как в Lucide / Heroicons / Tabler (например bolt, shield-check, truck, droplets, ruler). Подбор идёт по нескольким библиотекам через Iconify.',
     'Не больше 6 карточек за раз. Тексты на русском.'
   ].join(' ');
 
@@ -660,12 +743,19 @@
   }
 
   function pushMsg(text, cls) {
-    const el = document.createElement('div');
-    el.className = 'chat-msg ' + cls;
-    el.textContent = text;
-    document.getElementById('chat-messages').appendChild(el);
-    el.scrollIntoView({ block: 'end', behavior: 'smooth' });
-    return el;
+    const row = document.createElement('div');
+    row.className = 'chat-msg-row ' + cls;
+    const label = document.createElement('div');
+    label.className = 'chat-msg-label';
+    label.textContent = cls === 'user' ? 'Вы' : cls === 'err' ? 'Ошибка' : 'Помощник';
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-msg-bubble ' + cls;
+    bubble.textContent = text;
+    row.appendChild(label);
+    row.appendChild(bubble);
+    document.getElementById('chat-messages').appendChild(row);
+    row.scrollIntoView({ block: 'end', behavior: 'smooth' });
+    return row;
   }
 
   function extractJsonObject(text) {
@@ -690,6 +780,29 @@
     return null;
   }
 
+  function formatCardsDoneRu(n) {
+    const n100 = n % 100;
+    const n10 = n % 10;
+    if (n100 >= 11 && n100 <= 19) return 'Готово: ' + n + ' карточек';
+    if (n10 === 1) return 'Готово: ' + n + ' карточка';
+    if (n10 >= 2 && n10 <= 4) return 'Готово: ' + n + ' карточки';
+    return 'Готово: ' + n + ' карточек';
+  }
+
+  function formatCardsSummary(cards) {
+    const n = cards.length;
+    var s = formatCardsDoneRu(n) + '. Они добавлены в блок «Сгенерировано чатом» ниже.';
+    if (n >= 1 && n <= 6) {
+      var lines = [];
+      for (var ci = 0; ci < cards.length; ci++) {
+        var t = (cards[ci].title != null ? String(cards[ci].title) : '').trim();
+        if (t) lines.push('• ' + t);
+      }
+      if (lines.length) s += '\n\n' + lines.join('\n');
+    }
+    return s;
+  }
+
   function normalizeIconSlug(raw) {
     return String(raw || 'sparkles')
       .trim()
@@ -700,11 +813,39 @@
 
   async function fetchIconSvg(slug) {
     const name = normalizeIconSlug(slug) || 'sparkles';
-    const tries = [
-      'https://api.iconify.design/heroicons/solid/' + encodeURIComponent(name) + '.svg',
-      'https://api.iconify.design/heroicons/outline/' + encodeURIComponent(name) + '.svg',
-      'https://api.iconify.design/mdi/' + encodeURIComponent(name) + '.svg'
+    /* Iconify: ~16 коллекций по одному slug + несколько запасных URL, если slug в наборе другой (напр. bolt → lightning). */
+    const prefixes = [
+      ['heroicons', 'solid', name],
+      ['heroicons', 'outline', name],
+      ['lucide', name],
+      ['tabler', name],
+      ['mdi', name],
+      ['carbon', name],
+      ['bi', name],
+      ['fa6-solid', name],
+      ['ri', name],
+      ['octicon', name],
+      ['iconamoon', name],
+      ['uil', name],
+      ['material-symbols', name],
+      ['ph', name + '-bold'],
+      ['ph', name + '-fill'],
+      ['ph', name + '-duotone'],
+      ['ph', name]
     ];
+    const tries = prefixes.map(function (p) {
+      if (p.length === 2) {
+        return 'https://api.iconify.design/' + p[0] + '/' + encodeURIComponent(p[1]) + '.svg';
+      }
+      return 'https://api.iconify.design/' + p[0] + '/' + encodeURIComponent(p[1]) + '/' + encodeURIComponent(p[2]) + '.svg';
+    });
+    if (name === 'bolt') {
+      tries.push(
+        'https://api.iconify.design/carbon/lightning.svg',
+        'https://api.iconify.design/octicon/zap.svg',
+        'https://api.iconify.design/ph/lightning-bold.svg'
+      );
+    }
     for (let i = 0; i < tries.length; i++) {
       const r = await fetch(tries[i]);
       if (!r.ok) continue;
@@ -744,47 +885,114 @@
     return (data.message && data.message.content) || '';
   }
 
-  async function geminiChat(userText, apiKey) {
-    // Актуальные id для generateContent (см. https://ai.google.dev/gemini-api/docs/models/gemini ).
-    // 1.5.x и суффикс -latest в AI Studio часто отключены; 2.0 Flash помечен deprecated.
+  async function geminiChatStream(userText, apiKey, onPartial) {
     const models = ['gemini-2.5-flash', 'gemini-3-flash-preview', 'gemini-3.1-flash-lite'];
+    const body = {
+      systemInstruction: { parts: [{ text: SYSTEM }] },
+      contents: [{ role: 'user', parts: [{ text: userText }] }],
+      generationConfig: { temperature: 0.35, maxOutputTokens: 8192 }
+    };
     let lastErr = null;
     for (let m = 0; m < models.length; m++) {
-      const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + models[m] + ':generateContent?key=' + encodeURIComponent(apiKey);
+      const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + models[m] +
+        ':streamGenerateContent?key=' + encodeURIComponent(apiKey) + '&alt=sse';
       const r = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: SYSTEM }] },
-          contents: [{ role: 'user', parts: [{ text: userText }] }],
-          generationConfig: { temperature: 0.35, maxOutputTokens: 8192 }
-        })
+        body: JSON.stringify(body)
       });
-      const data = await r.json().catch(function () { return {}; });
       if (!r.ok) {
-        lastErr = (data.error && data.error.message) || r.statusText;
+        const errText = await r.text().catch(function () { return ''; });
+        try {
+          const data = JSON.parse(errText);
+          lastErr = (data.error && data.error.message) || r.statusText;
+        } catch (ex) {
+          lastErr = r.statusText || errText.slice(0, 200);
+        }
         continue;
       }
-      const parts = data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts;
-      if (!parts || !parts.length) {
-        lastErr = 'Пустой ответ Gemini';
+      if (!r.body) {
+        lastErr = 'Нет тела ответа (stream)';
         continue;
       }
-      return parts.map(function (p) { return p.text || ''; }).join('');
+      const reader = r.body.getReader();
+      const decoder = new TextDecoder();
+      let lineBuf = '';
+      let accumulated = '';
+      let raf = null;
+      function flushPartial() {
+        onPartial(accumulated);
+        raf = null;
+      }
+      while (true) {
+        const chunk = await reader.read();
+        if (chunk.done) break;
+        lineBuf += decoder.decode(chunk.value, { stream: true });
+        var nl;
+        while ((nl = lineBuf.indexOf('\n')) >= 0) {
+          var line = lineBuf.slice(0, nl);
+          lineBuf = lineBuf.slice(nl + 1);
+          line = line.replace(/\r$/, '');
+          if (!line.startsWith('data:')) continue;
+          var payload = line.slice(5).trim();
+          if (!payload || payload === '[DONE]') continue;
+          var obj;
+          try {
+            obj = JSON.parse(payload);
+          } catch (syntaxErr) {
+            continue;
+          }
+          if (obj.error) throw new Error((obj.error.message || JSON.stringify(obj.error)).slice(0, 400));
+          var parts = obj.candidates && obj.candidates[0] && obj.candidates[0].content && obj.candidates[0].content.parts;
+          if (parts) {
+            for (var pi = 0; pi < parts.length; pi++) {
+              var frag = parts[pi].text;
+              if (frag) accumulated += frag;
+            }
+          }
+          if (!raf) raf = requestAnimationFrame(flushPartial);
+        }
+      }
+      if (raf) cancelAnimationFrame(raf);
+      onPartial(accumulated);
+      if (accumulated.length) return accumulated;
+      lastErr = 'Пустой поток от Gemini';
     }
-    throw new Error(lastErr || 'Gemini error');
+    throw new Error(lastErr || 'Gemini stream error');
   }
 
-  async function runModel(userText) {
+  async function runModelStreaming(userText, bubbleEl) {
     const provider = localStorage.getItem(LS.provider) || 'gemini';
     if (provider === 'ollama') {
+      bubbleEl.textContent = 'Запрос к Ollama…';
       const base = localStorage.getItem(LS.ollamaUrl) || 'http://127.0.0.1:11434';
       const model = localStorage.getItem(LS.ollamaModel) || 'llama3.2';
-      return ollamaChat(userText, base, model);
+      const out = await ollamaChat(userText, base, model);
+      bubbleEl.textContent = 'Ответ получен, собираю карточки…';
+      return out;
     }
     const key = localStorage.getItem(LS.geminiKey) || '';
     if (!key.trim()) throw new Error('Укажите ключ Gemini в настройках и нажмите «Сохранить».');
-    return geminiChat(userText, key.trim());
+    bubbleEl.textContent = 'Подключение к Gemini…';
+    return geminiChatStream(userText, key.trim(), function () {
+      bubbleEl.textContent = 'Генерация…';
+    });
+  }
+
+  function pushAssistantWorking() {
+    const row = document.createElement('div');
+    row.className = 'chat-msg-row bot';
+    const label = document.createElement('div');
+    label.className = 'chat-msg-label';
+    label.textContent = 'Помощник';
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-msg-bubble bot streaming';
+    bubble.textContent = 'Генерация…';
+    row.appendChild(label);
+    row.appendChild(bubble);
+    document.getElementById('chat-messages').appendChild(row);
+    row.scrollIntoView({ block: 'end', behavior: 'smooth' });
+    return { row: row, bubble: bubble };
   }
 
   function loadSettingsIntoForm() {
@@ -801,19 +1009,53 @@
     document.getElementById('gemini-block').style.display = p === 'gemini' ? 'block' : 'none';
   }
 
+  function closeSettingsView() {
+    document.getElementById('settings-panel').hidden = true;
+    document.getElementById('chat-panel').hidden = false;
+    document.getElementById('chat-head-title').textContent = 'Чат';
+    const btn = document.getElementById('chat-settings-toggle');
+    btn.textContent = 'Настройки ИИ';
+    btn.setAttribute('aria-expanded', 'false');
+  }
+
   function saveSettings() {
     localStorage.setItem(LS.provider, document.getElementById('chat-provider').value);
     localStorage.setItem(LS.ollamaUrl, document.getElementById('ollama-url').value.trim() || 'http://127.0.0.1:11434');
     localStorage.setItem(LS.ollamaModel, document.getElementById('ollama-model').value.trim() || 'llama3.2');
     localStorage.setItem(LS.geminiKey, document.getElementById('gemini-key').value);
+    closeSettingsView();
     pushMsg('Настройки сохранены в этом браузере.', 'bot');
   }
 
+  function autosizeChatInput() {
+    const ta = document.getElementById('chat-input');
+    if (!ta) return;
+    ta.style.height = 'auto';
+    ta.style.overflowY = 'hidden';
+    var maxPx = 200;
+    var minPx = 44;
+    var next = Math.max(minPx, Math.min(maxPx, ta.scrollHeight));
+    ta.style.height = next + 'px';
+    if (ta.scrollHeight > maxPx) ta.style.overflowY = 'auto';
+  }
+
+  document.getElementById('chat-input').addEventListener('input', autosizeChatInput);
+  document.getElementById('chat-input').addEventListener('paste', function () {
+    requestAnimationFrame(autosizeChatInput);
+  });
+
   document.getElementById('chat-settings-toggle').addEventListener('click', function () {
-    const panel = document.getElementById('chat-settings');
-    const open = panel.hidden;
-    panel.hidden = !open;
-    this.setAttribute('aria-expanded', open ? 'true' : 'false');
+    const settingsPanel = document.getElementById('settings-panel');
+    const opening = settingsPanel.hidden;
+    if (opening) {
+      settingsPanel.hidden = false;
+      document.getElementById('chat-panel').hidden = true;
+      document.getElementById('chat-head-title').textContent = 'Настройки ИИ';
+      this.textContent = 'К чату';
+      this.setAttribute('aria-expanded', 'true');
+    } else {
+      closeSettingsView();
+    }
   });
 
   document.getElementById('chat-provider').addEventListener('change', syncProviderBlocks);
@@ -829,13 +1071,17 @@
     btn.disabled = true;
     pushMsg(text, 'user');
     input.value = '';
-    let replyEl = null;
+    autosizeChatInput();
+    const working = pushAssistantWorking();
+    let replyEl = working.row;
     try {
-      const raw = await runModel(text);
-      replyEl = pushMsg(raw, 'bot');
+      const raw = await runModelStreaming(text, working.bubble);
       const data = extractJsonObject(raw);
       if (!data || !Array.isArray(data.cards)) {
         throw new Error('В ответе нет JSON с полем cards. Попробуйте ещё раз или смените модель.');
+      }
+      if (!data.cards.length) {
+        throw new Error('Модель вернула пустой список карточек.');
       }
       const grid = document.getElementById('generated-cards');
       const heading = document.getElementById('generated-heading');
@@ -853,16 +1099,24 @@
           '<div class="card-desc">' + escapeHtml(desc) + '</div>';
         grid.appendChild(card);
       }
-      pushMsg('Карточки добавлены в блок «Сгенерировано чатом» слева.', 'bot');
+      working.bubble.classList.remove('streaming');
+      working.bubble.textContent = formatCardsSummary(data.cards);
     } catch (err) {
-      if (replyEl && replyEl.parentNode) replyEl.remove();
-      pushMsg(err.message || String(err), 'err');
+      if (working && working.bubble && working.row && working.row.parentNode) {
+        const lab = working.row.querySelector('.chat-msg-label');
+        if (lab) lab.textContent = 'Ошибка';
+        working.bubble.classList.remove('streaming');
+        working.bubble.classList.remove('bot');
+        working.bubble.classList.add('err');
+        working.bubble.textContent = 'Не вышло: ' + (err.message || String(err)).slice(0, 300);
+      }
     } finally {
       btn.disabled = false;
     }
   });
 
   loadSettingsIntoForm();
+  autosizeChatInput();
   pushMsg('Привет. Настройте режим (Gemini или Ollama), сохраните — затем опишите тезисы для новых карточек.', 'bot');
 })();
 </script>
