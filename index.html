@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Иконки карточек</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #F0F0F0;
+    font-family: 'Inter', sans-serif;
+    padding: 48px 32px;
+    min-height: 100vh;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .card {
+    background: #FFFFFF;
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid rgba(0,0,0,0.07);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .icon-wrap {
+    width: 64px;
+    height: 64px;
+    background: #F0F0F0;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .icon-wrap svg { width: 36px; height: 36px; }
+  .card-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1A1A1A;
+    line-height: 1.5;
+  }
+  .card-desc {
+    font-size: 13px;
+    color: #5A5A5A;
+    line-height: 1.65;
+  }
+</style>
+<style>
+  .icon-wrap {
+    cursor: pointer;
+    position: relative;
+    transition: background 0.15s;
+  }
+  .icon-wrap:hover { background: #E4E4E4; }
+  .icon-wrap:active { background: #D8D8D8; }
+
+  .copy-toast {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(12px);
+    background: #1A1A1A;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .copy-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Разделительная полоса между блоками карточек */
+  .section-divider {
+    max-width: 1100px;
+    margin: 40px auto;
+    height: 0;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    background: none;
+  }
+</style>
+</head>
+<body>
+<div class="copy-toast" id="toast">SVG скопирован</div>
+
+<div class="grid">
+
+  <!-- 1. Ровная поверхность — уровень filled -->
+  <div class="card">
+    <div class="icon-wrap" data-name="ruler">
+      <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+        <path d="M235.32,96,96,235.31a16,16,0,0,1-22.63,0L20.68,182.63a16,16,0,0,1,0-22.63l29.17-29.17a4,4,0,0,1,5.66,0l34.83,34.83a8,8,0,0,0,11.71-.43,8.18,8.18,0,0,0-.6-11.09L66.82,119.51a4,4,0,0,1,0-5.65l15-15a4,4,0,0,1,5.66,0l34.83,34.83a8,8,0,0,0,11.71-.43,8.18,8.18,0,0,0-.6-11.09L98.83,87.51a4,4,0,0,1,0-5.65l15-15a4,4,0,0,1,5.65,0l34.83,34.83a8,8,0,0,0,11.72-.43,8.18,8.18,0,0,0-.61-11.09L130.83,55.51a4,4,0,0,1,0-5.65L160,20.69a16,16,0,0,1,22.63,0l52.69,52.68A16,16,0,0,1,235.32,96Z" fill="#1A1A1A"/>
+      </svg>
+    </div>
+    <div class="card-title">Ровная поверхность без дополнительных работ</div>
+    <div class="card-desc">Стяжка сразу готова под укладку любого финишного покрытия</div>
+  </div>
+
+  <!-- 2. Без трещин — Heroicons v2 «cube» solid (MIT) https://heroicons.com/ — однородный монолит (карточка 19 уже использует «слои» square-3-stack-3d) -->
+  <div class="card">
+    <div class="icon-wrap" data-name="cube">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path fill="#1A1A1A" d="M12.378 1.602a.75.75 0 0 0-.756 0L3 6.632l9 5.25 9-5.25-8.622-5.03ZM21.75 7.93l-9 5.25v9l8.628-5.032a.75.75 0 0 0 .372-.648V7.93ZM11.25 22.18v-9l-9-5.25v8.57a.75.75 0 0 0 .372.648l8.628 5.033Z"/>
+      </svg>
+    </div>
+    <div class="card-title">Отсутствие трещин и усадки</div>
+    <div class="card-desc">Усадка не превышает 0,2 мм/м, поэтому поверхность не трескается со временем</div>
+  </div>
+
+  <!-- 3. Тепло и звук — house.fill + wave -->
+  <div class="card">
+    <div class="icon-wrap" data-name="headphones">
+      <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+        <path d="M232,128v56a24,24,0,0,1-24,24H192a24,24,0,0,1-24-24V144a24,24,0,0,1,24-24h23.65a87.71,87.71,0,0,0-87-80H128a88,88,0,0,0-87.64,80H64a24,24,0,0,1,24,24v40a24,24,0,0,1-24,24H48a24,24,0,0,1-24-24V128A104.11,104.11,0,0,1,201.89,54.66,103.41,103.41,0,0,1,232,128Z" fill="#1A1A1A"/>
+      </svg>
+    </div>
+    <div class="card-title">Улучшает тепло и звукоизоляцию</div>
+    <div class="card-desc">Снижает теплопотери и уровень шума в помещении</div>
+  </div>
+
+  <!-- 4. Без протечек — drop.fill + slash badge -->
+  <div class="card">
+    <div class="icon-wrap" data-name="drop">
+      <svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 3C14 3 7 12 7 17.5a7 7 0 0014 0C21 12 14 3 14 3Z" fill="#1A1A1A" stroke="#1A1A1A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="card-title">Без риска протечек на нижние этажи</div>
+    <div class="card-desc">Раствор не течёт, нет грязи и риска залить соседей</div>
+  </div>
+
+  <!-- 5. Тёплый пол — flame.fill -->
+  <div class="card">
+    <div class="icon-wrap" data-name="thermometer">
+      <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+        <path d="M152,146.08V40a32,32,0,0,0-64,0V146.08a56,56,0,1,0,64,0ZM136,56H104V40a16,16,0,0,1,32,0Zm41.3,24.77a8,8,0,0,1,2.33-11.07c15-9.79,26.87-4.75,35.51-1.06C223,72,227.76,74,235.63,68.89a8,8,0,0,1,8.74,13.41C237.88,86.53,232,88,226.69,88c-7,0-12.92-2.54-17.83-4.63C201,80,196.24,78,188.37,83.11A8,8,0,0,1,177.3,80.77Zm69.4,22.46a8,8,0,0,1-2.33,11.07C237.88,118.53,232,120,226.69,120c-7,0-12.92-2.54-17.83-4.63-7.87-3.36-12.62-5.38-20.49-.25a8,8,0,0,1-8.74-13.41c15-9.79,26.87-4.75,35.51-1.06,7.87,3.36,12.62,5.39,20.49.25A8,8,0,0,1,246.7,103.23Z" fill="#1A1A1A"/>
+      </svg>
+    </div>
+    <div class="card-title">Отлично подходит для тёплого пола</div>
+    <div class="card-desc">Равномерно распределяет тепло без пустот и перегревов</div>
+  </div>
+
+  <!-- 6. 12 часов — Heroicons v2 «clock» solid (MIT) https://heroicons.com/ -->
+  <div class="card">
+    <div class="icon-wrap" data-name="clock">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path fill-rule="evenodd" clip-rule="evenodd" fill="#1A1A1A" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z"/>
+      </svg>
+    </div>
+    <div class="card-title">Ходить можно уже через 12 часов</div>
+    <div class="card-desc">Быстро схватывается за счёт низкого содержания воды. Не нужно ждать 3–4 дня</div>
+  </div>
+
+  <!-- 7. Прочность — bolt.fill -->
+  <div class="card">
+    <div class="icon-wrap" data-name="bolt">
+      <svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16.5 2L7 16H13.5L11 26L22 12H15.5L16.5 2Z" fill="#1A1A1A" stroke="#1A1A1A" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="card-title">Высокая плотность и прочность</div>
+    <div class="card-desc">Выдерживает нагрузки до 150–200 кг/см², не крошится и не пылит</div>
+  </div>
+
+  <!-- 8. Экономия — rublesign.circle.fill -->
+  <div class="card">
+    <div class="icon-wrap" data-name="percent">
+      <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+        <path d="M208.49,64.47l-144,144a12,12,0,1,1-17-17l144-144a12,12,0,0,1,17,17ZM47.72,104.27A40,40,0,1,1,76,116,39.72,39.72,0,0,1,47.72,104.27ZM60,76a16,16,0,1,0,4.69-11.31A15.87,15.87,0,0,0,60,76ZM220,180a40,40,0,1,1-11.72-28.29A39.71,39.71,0,0,1,220,180Zm-24,0a15.87,15.87,0,0,0-4.69-11.32h0A16,16,0,1,0,196,180Z" fill="#1A1A1A"/>
+      </svg>
+    </div>
+    <div class="card-title">Экономия на дополнительных работах</div>
+    <div class="card-desc">Не требуется дополнительный наливной пол, меньше расход финишных покрытий</div>
+  </div>
+
+  <!-- 9. Уклоны — slope triangle filled -->
+  <div class="card">
+    <div class="icon-wrap" data-name="shapes">
+      <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+        <path d="M111.59,181.47A8,8,0,0,1,104,192H24a8,8,0,0,1-7.59-10.53l40-120a8,8,0,0,1,15.18,0ZM208,76a52,52,0,1,0-52,52A52.06,52.06,0,0,0,208,76Zm16,68H136a8,8,0,0,0-8,8v56a8,8,0,0,0,8,8h88a8,8,0,0,0,8-8V152A8,8,0,0,0,224,144Z" fill="#1A1A1A"/>
+      </svg>
+    </div>
+    <div class="card-title">Возможность создания сложных форм и уклонов</div>
+    <div class="card-desc">Технология позволяет легко делать уклоны любой сложности (например, в душевых)</div>
+  </div>
+
+</div>
+
+<hr class="section-divider" role="presentation" aria-hidden="true">
+
+<div class="grid">
+
+  <!-- 10. Скорость — speed chevrons -->
+  <div class="card">
+    <div class="icon-wrap" data-name="speedometer">
+      <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+        <path d="M221.87,90.86a4,4,0,0,0-6.17-.62l-75.42,75.42A8,8,0,0,1,129,154.35l92.7-92.69a8,8,0,0,0-11.32-11.32L197,63.73A112.05,112.05,0,0,0,22.34,189.25,16.09,16.09,0,0,0,37.46,200H218.53a16,16,0,0,0,15.11-10.71,112.28,112.28,0,0,0-11.77-98.43ZM57.44,166.41a8,8,0,0,1-6.25,9.43,7.89,7.89,0,0,1-1.6.16,8,8,0,0,1-7.83-6.41A88.06,88.06,0,0,1,143.59,65.38a8,8,0,0,1-2.82,15.75,72.07,72.07,0,0,0-83.33,85.28Z" fill="#1A1A1A"/>
+      </svg>
+    </div>
+    <div class="card-title">В 4 раза быстрее ручной штукатурки</div>
+    <div class="card-desc">150 м² за 1 день вместо 4–6 дней. Ремонт проходит быстрее</div>
+  </div>
+
+  <!-- 11. Экономия материалов — percent -->
+  <div class="card">
+    <div class="icon-wrap" data-name="discount">
+      <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+        <path d="M208.49,64.47l-144,144a12,12,0,1,1-17-17l144-144a12,12,0,0,1,17,17ZM47.72,104.27A40,40,0,1,1,76,116,39.72,39.72,0,0,1,47.72,104.27ZM60,76a16,16,0,1,0,4.69-11.31A15.87,15.87,0,0,0,60,76ZM220,180a40,40,0,1,1-11.72-28.29A39.71,39.71,0,0,1,220,180Zm-24,0a15.87,15.87,0,0,0-4.69-11.32h0A16,16,0,1,0,196,180Z" fill="#1A1A1A"/>
+      </svg>
+    </div>
+    <div class="card-title">Экономия до 30–40% на материалах</div>
+    <div class="card-desc">Расход смеси 12–13 кг/м² вместо 16–18 кг при ручном нанесении</div>
+  </div>
+
+  <!-- 12. Ровные стены — wall + check -->
+  <div class="card">
+    <div class="icon-wrap" data-name="wall">
+      <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+        <path d="M232,56V88a4,4,0,0,1-4,4H136V52a4,4,0,0,1,4-4h84A8,8,0,0,1,232,56Zm-4,52H184v44h44a4,4,0,0,0,4-4V112A4,4,0,0,0,228,108ZM88,152h80V108H88Zm-60,0H72V108H28a4,4,0,0,0-4,4v36A4,4,0,0,0,28,152Zm200,16H136v36a4,4,0,0,0,4,4h84a8,8,0,0,0,8-8V172A4,4,0,0,0,228,168ZM28,92h92V52a4,4,0,0,0-4-4H32a8,8,0,0,0-8,8V88A4,4,0,0,0,28,92Zm-4,80v28a8,8,0,0,0,8,8h84a4,4,0,0,0,4-4V168H28A4,4,0,0,0,24,172Z" fill="#1A1A1A"/>
+      </svg>
+    </div>
+    <div class="card-title">Ровные стены без финишной шпаклёвки</div>
+    <div class="card-desc">Машина даёт однородный слой с минимальными отклонениями (±1–2 мм)</div>
+  </div>
+
+  <!-- 13. Долговечность — hourglass -->
+  <div class="card">
+    <div class="icon-wrap" data-name="hourglass">
+      <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+        <path d="M200,75.64V40a16,16,0,0,0-16-16H72A16,16,0,0,0,56,40V76a16.08,16.08,0,0,0,6.41,12.8L114.67,128,62.4,167.2A16.07,16.07,0,0,0,56,180v36a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V180.36a16,16,0,0,0-6.36-12.77L141.26,128l52.38-39.59A16.05,16.05,0,0,0,200,75.64Z" fill="#1A1A1A"/>
+      </svg>
+    </div>
+    <div class="card-title">Стены держатся десятилетиями</div>
+    <div class="card-desc">Раствор под давлением глубоко проникает в основание</div>
+  </div>
+
+  <!-- 14. Влагостойкость — Bootstrap Icons «umbrella-fill» (MIT) https://icons.getbootstrap.com/icons/umbrella-fill/ -->
+  <div class="card">
+    <div class="icon-wrap" data-name="umbrella">
+      <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path fill-rule="evenodd" fill="#1A1A1A" d="M8 0a.5.5 0 0 1 .5.5v.514C12.625 1.238 16 4.22 16 8c0 0 0 .5-.5.5-.149 0-.352-.145-.352-.145l-.004-.004-.025-.023a3.5 3.5 0 0 0-.555-.394A3.17 3.17 0 0 0 13 7.5c-.638 0-1.178.213-1.564.434a3.5 3.5 0 0 0-.555.394l-.025.023-.003.003s-.204.146-.353.146-.352-.145-.352-.145l-.004-.004-.025-.023a3.5 3.5 0 0 0-.555-.394 3.3 3.3 0 0 0-1.064-.39V13.5H8h.5v.039l-.005.083a3 3 0 0 1-.298 1.102 2.26 2.26 0 0 1-.763.88C7.06 15.851 6.587 16 6 16s-1.061-.148-1.434-.396a2.26 2.26 0 0 1-.763-.88 3 3 0 0 1-.302-1.185v-.025l-.001-.009v-.003s0-.002.5-.002h-.5V13a.5.5 0 0 1 1 0v.506l.003.044a2 2 0 0 0 .195.726c.095.191.23.367.423.495.19.127.466.229.879.229s.689-.102.879-.229c.193-.128.328-.304.424-.495a2 2 0 0 0 .197-.77V7.544a3.3 3.3 0 0 0-1.064.39 3.5 3.5 0 0 0-.58.417l-.004.004S5.65 8.5 5.5 8.5s-.352-.145-.352-.145l-.004-.004a3.5 3.5 0 0 0-.58-.417A3.17 3.17 0 0 0 3 7.5c-.638 0-1.177.213-1.564.434a3.5 3.5 0 0 0-.58.417l-.004.004S.65 8.5.5 8.5C0 8.5 0 8 0 8c0-3.78 3.375-6.762 7.5-6.986V.5A.5.5 0 0 1 8 0"/>
+      </svg>
+    </div>
+    <div class="card-title">Повышенная влагостойкость</div>
+    <div class="card-desc">Поверхность меньше впитывает влагу и защищена от плесени</div>
+  </div>
+
+  <!-- 15. Тепло и звук — Heroicons v2 «speaker-wave» solid (MIT) https://heroicons.com/ -->
+  <div class="card">
+    <div class="icon-wrap" data-name="speaker">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path fill="#1A1A1A" d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 0 0 1.5 12c0 .898.121 1.768.35 2.595.341 1.24 1.518 1.905 2.659 1.905h1.93l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06ZM18.584 5.106a.75.75 0 0 1 1.06 0c3.808 3.807 3.808 9.98 0 13.788a.75.75 0 0 1-1.06-1.06 8.25 8.25 0 0 0 0-11.668.75.75 0 0 1 0-1.06Z"/>
+        <path fill="#1A1A1A" d="M15.932 7.757a.75.75 0 0 1 1.061 0 6 6 0 0 1 0 8.486.75.75 0 0 1-1.06-1.061 4.5 4.5 0 0 0 0-6.364.75.75 0 0 1 0-1.06Z"/>
+      </svg>
+    </div>
+    <div class="card-title">Высокая тепло- и звукоизоляция</div>
+    <div class="card-desc">Отсутствие воздушных зазоров улучшает теплоизоляцию</div>
+  </div>
+
+  <!-- 16. Углы 90° — L-shape -->
+  <div class="card">
+    <div class="icon-wrap" data-name="square">
+      <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+        <path d="M200,40H56A16,16,0,0,0,40,56V200a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40ZM56,56h72V200H56Z" fill="#1A1A1A"/>
+      </svg>
+    </div>
+    <div class="card-title">Ровные углы и откосы под 90°</div>
+    <div class="card-desc">Идеальные внешние и внутренние углы без дополнительных профилей</div>
+  </div>
+
+  <!-- 17. Закрытая система / меньше пыли — Heroicons v2 «funnel» solid (MIT) https://heroicons.com/ -->
+  <div class="card">
+    <div class="icon-wrap" data-name="funnel">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path fill-rule="evenodd" clip-rule="evenodd" fill="#1A1A1A" d="M3.792 2.938A49.069 49.069 0 0 1 12 2.25c2.797 0 5.54.236 8.209.688a1.857 1.857 0 0 1 1.541 1.836v1.044a3 3 0 0 1-.879 2.121l-6.182 6.182a1.5 1.5 0 0 0-.439 1.061v2.927a3 3 0 0 1-1.658 2.684l-1.757.878A.75.75 0 0 1 9.75 21v-5.818a1.5 1.5 0 0 0-.44-1.06L3.13 7.938a3 3 0 0 1-.879-2.121V4.774c0-.897.64-1.683 1.542-1.836Z"/>
+      </svg>
+    </div>
+    <div class="card-title">Значительно меньше грязи и пыли</div>
+    <div class="card-desc">Замес и нанесение происходят в закрытой системе. В помещении чище, меньше уборки</div>
+  </div>
+
+  <!-- 18. Адгезия / монолит слоёв — Heroicons «rectangle-stack» solid (MIT) https://heroicons.com/ -->
+  <div class="card">
+    <div class="icon-wrap" data-name="magnet">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path fill="#1A1A1A" d="M5.56641 4.65724C5.9435 4.55472 6.34029 4.5 6.74986 4.5H17.2499C17.6594 4.5 18.0562 4.55472 18.4333 4.65724C17.9406 3.67454 16.924 3 15.7499 3H8.24986C7.0757 3 6.0591 3.67454 5.56641 4.65724Z"/>
+        <path fill="#1A1A1A" d="M2.25 12C2.25 10.3431 3.59315 9 5.25 9H18.75C20.4069 9 21.75 10.3431 21.75 12V18C21.75 19.6569 20.4069 21 18.75 21H5.25C3.59315 21 2.25 19.6569 2.25 18V12Z"/>
+        <path fill="#1A1A1A" d="M5.24986 7.5C4.84029 7.5 4.4435 7.55472 4.06641 7.65724C4.5591 6.67454 5.5757 6 6.74986 6H17.2499C18.424 6 19.4406 6.67454 19.9333 7.65724C19.5562 7.55472 19.1594 7.5 18.7499 7.5H5.24986Z"/>
+      </svg>
+    </div>
+    <div class="card-title">Минимальный риск отслаивания и пустот</div>
+    <div class="card-desc">Обеспечивается максимальная адгезия, исключается образование пустот</div>
+  </div>
+
+</div>
+
+<hr class="section-divider" role="presentation" aria-hidden="true">
+
+<!-- Глифы в духе SF Symbols: сплошная заливка, viewBox 28 (читаемо при ~16px) -->
+<div class="grid">
+
+  <!-- 19. Полусухая стяжка — Heroicons «square-3-stack-3d» solid (MIT) https://heroicons.com/ — слои покрытия, без «календаря» -->
+  <div class="card">
+    <div class="icon-wrap" data-name="layers">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path fill="#1A1A1A" d="M11.6444 1.58965C11.8664 1.47012 12.1336 1.47012 12.3556 1.58965L22.1056 6.83965C22.3485 6.97046 22.5 7.22409 22.5 7.5C22.5 7.77591 22.3485 8.02954 22.1056 8.16035L12.3556 13.4104C12.1336 13.5299 11.8664 13.5299 11.6444 13.4104L1.89443 8.16035C1.65149 8.02954 1.5 7.77591 1.5 7.5C1.5 7.22409 1.65149 6.97046 1.89443 6.83965L11.6444 1.58965Z"/>
+        <path fill="#1A1A1A" d="M3.26468 10.6018L10.9333 14.731C11.5992 15.0896 12.4008 15.0896 13.0667 14.7311L20.7353 10.6018L22.1056 11.3396C22.3485 11.4704 22.5 11.7241 22.5 12C22.5 12.2759 22.3485 12.5295 22.1056 12.6603L12.3556 17.9103C12.1336 18.0299 11.8664 18.0299 11.6444 17.9103L1.89443 12.6603C1.65149 12.5295 1.5 12.2759 1.5 12C1.5 11.7241 1.65149 11.4704 1.89443 11.3396L3.26468 10.6018Z"/>
+        <path fill="#1A1A1A" d="M10.9333 19.231L3.26468 15.1018L1.89443 15.8396C1.65149 15.9704 1.5 16.2241 1.5 16.5C1.5 16.7759 1.65149 17.0295 1.89443 17.1603L11.6444 22.4103C11.8664 22.5299 12.1336 22.5299 12.3556 22.4103L22.1056 17.1603C22.3485 17.0295 22.5 16.7759 22.5 16.5C22.5 16.2241 22.3485 15.9704 22.1056 15.8396L20.7353 15.1018L13.0667 19.2311C12.4008 19.5896 11.5992 19.5896 10.9333 19.231Z"/>
+      </svg>
+    </div>
+    <div class="card-title">Более 9 лет специализируемся именно на полусухой стяжке</div>
+    <div class="card-desc">Одна технология от замеса до сдачи — без универсальных «на всё» решений и лишних переделок</div>
+  </div>
+
+  <!-- 20. Регион — Heroicons v2 «map-pin» solid (MIT) https://heroicons.com/ — более плавный силуэт -->
+  <div class="card">
+    <div class="icon-wrap" data-name="map-pin">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path fill-rule="evenodd" clip-rule="evenodd" fill="#1A1A1A" d="M11.5397 22.351C11.57 22.3685 11.5937 22.3821 11.6105 22.3915L11.6384 22.4071C11.8613 22.5294 12.1378 22.5285 12.3608 22.4075L12.3895 22.3915C12.4063 22.3821 12.43 22.3685 12.4603 22.351C12.5207 22.316 12.607 22.265 12.7155 22.1982C12.9325 22.0646 13.2388 21.8676 13.6046 21.6091C14.3351 21.0931 15.3097 20.3274 16.2865 19.3273C18.2307 17.3368 20.25 14.3462 20.25 10.5C20.25 5.94365 16.5563 2.25 12 2.25C7.44365 2.25 3.75 5.94365 3.75 10.5C3.75 14.3462 5.76932 17.3368 7.71346 19.3273C8.69025 20.3274 9.66491 21.0931 10.3954 21.6091C10.7612 21.8676 11.0675 22.0646 11.2845 22.1982C11.393 22.265 11.4793 22.316 11.5397 22.351ZM12 13.5C13.6569 13.5 15 12.1569 15 10.5C15 8.84315 13.6569 7.5 12 7.5C10.3431 7.5 9 8.84315 9 10.5C9 12.1569 10.3431 13.5 12 13.5Z"/>
+      </svg>
+    </div>
+    <div class="card-title">Работаем в Перми и крае с 2017 года</div>
+    <div class="card-desc">За это время выполнили более 8&nbsp;000 объектов</div>
+  </div>
+
+  <!-- 21. Бригады — Bootstrap Icons «people-fill» (MIT) https://icons.getbootstrap.com/icons/people-fill/ -->
+  <div class="card">
+    <div class="icon-wrap" data-name="people">
+      <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path fill="#1A1A1A" d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+      </svg>
+    </div>
+    <div class="card-title">8 собственных бригад, более 5 лет в одном составе</div>
+    <div class="card-desc">Штатные мастера с опытом от 10 лет. Без случайных подсобников с улицы</div>
+  </div>
+
+  <!-- 22. Гарантия — Heroicons v2 «shield-check» solid (MIT) https://heroicons.com/ -->
+  <div class="card">
+    <div class="icon-wrap" data-name="shield">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path fill-rule="evenodd" clip-rule="evenodd" fill="#1A1A1A" d="M12.516 2.17a.75.75 0 0 0-1.032 0 11.209 11.209 0 0 1-7.877 3.08.75.75 0 0 0-.722.515A12.74 12.74 0 0 0 2.25 9.75c0 5.942 4.064 10.933 9.563 12.348a.749.749 0 0 0 .374 0c5.499-1.415 9.563-6.406 9.563-12.348 0-1.39-.223-2.73-.635-3.985a.75.75 0 0 0-.722-.516l-.143.001c-2.996 0-5.717-1.17-7.734-3.08Zm3.094 8.016a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"/>
+      </svg>
+    </div>
+    <div class="card-title">Фиксируем гарантию 1 год в договоре</div>
+    <div class="card-desc">Все условия, сроки и качество прописаны в договоре. Вы защищены юридически</div>
+  </div>
+
+  <!-- 23. Замер — Font Awesome Free 6 «tape» solid (CC BY 4.0) https://fontawesome.com/icons/tape — рулетка -->
+  <div class="card">
+    <div class="icon-wrap" data-name="tape">
+      <svg viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path fill="#1A1A1A" d="M380.8 416c41.5-40.7 67.2-97.3 67.2-160C448 132.3 347.7 32 224 32S0 132.3 0 256S100.3 480 224 480H544c17.7 0 32-14.3 32-32s-14.3-32-32-32H380.8zM224 160a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm64 96a64 64 0 1 0-128 0 64 64 0 1 0 128 0z"/>
+      </svg>
+    </div>
+    <div class="card-title">Бесплатный замер в день обращения</div>
+    <div class="card-desc">Мастер приезжает, замеряет и тут же называет финальную стоимость</div>
+  </div>
+
+  <!-- 24. Техника — Heroicons v2 «truck» solid (MIT) https://heroicons.com/ -->
+  <div class="card">
+    <div class="icon-wrap" data-name="truck">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path fill="#1A1A1A" d="M3.375 4.5C2.339 4.5 1.5 5.34 1.5 6.375V13.5h12V6.375c0-1.036-.84-1.875-1.875-1.875h-8.25ZM13.5 15h-12v2.625c0 1.035.84 1.875 1.875 1.875h.375a3 3 0 1 1 6 0h3a.75.75 0 0 0 .75-.75V15Z"/>
+        <path fill="#1A1A1A" d="M8.25 19.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0ZM15.75 6.75a.75.75 0 0 0-.75.75v11.25c0 .087.015.17.042.248a3 3 0 0 1 5.958.464c.853-.175 1.522-.935 1.464-1.883a18.659 18.659 0 0 0-3.732-10.104 1.837 1.837 0 0 0-1.47-.725H15.75Z"/>
+        <path fill="#1A1A1A" d="M19.5 19.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0Z"/>
+      </svg>
+    </div>
+    <div class="card-title">Немецкое оборудование, транспорт в собственности</div>
+    <div class="card-desc">От затирочных машин до экскаваторов. Работаем без задержек и переплат</div>
+  </div>
+
+  <!-- 25. Поставки — Font Awesome Free 6 «industry» solid (CC BY 4.0) https://fontawesome.com/icons/industry — цех / завод, не «офисный» силуэт -->
+  <div class="card">
+    <div class="icon-wrap" data-name="industry">
+      <svg viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path fill="#1A1A1A" d="M64 32C46.3 32 32 46.3 32 64V304v48 80c0 26.5 21.5 48 48 48H496c26.5 0 48-21.5 48-48V304 152.2c0-18.2-19.4-29.7-35.4-21.1L352 215.4V152.2c0-18.2-19.4-29.7-35.4-21.1L160 215.4V64c0-17.7-14.3-32-32-32H64z"/>
+      </svg>
+    </div>
+    <div class="card-title">Прямые поставки с заводов и карьеров</div>
+    <div class="card-desc">Материал всегда есть в нужном объеме, без накруток посредников</div>
+  </div>
+
+</div>
+
+<script>
+  function copyText(text) {
+    if (navigator.clipboard && location.protocol !== 'file:') {
+      return navigator.clipboard.writeText(text);
+    }
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;opacity:0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    return Promise.resolve();
+  }
+
+  document.querySelectorAll('.icon-wrap').forEach(wrap => {
+    wrap.addEventListener('click', () => {
+      const svg = wrap.querySelector('svg');
+      const clone = svg.cloneNode(true);
+      const vb = svg.viewBox.baseVal;
+      const pad = vb.width * 0.125;
+      clone.setAttribute('viewBox', `${vb.x - pad} ${vb.y - pad} ${vb.width + pad * 2} ${vb.height + pad * 2}`);
+      clone.setAttribute('width', '24');
+      clone.setAttribute('height', '24');
+      clone.querySelectorAll('*').forEach(el => {
+        ['fill', 'stroke'].forEach(attr => {
+          const v = el.getAttribute(attr);
+          if (!v) return;
+          if (v === '#1A1A1A' || v === '#1a1a1a') el.setAttribute(attr, 'white');
+          else if (v === 'white' || v === '#ffffff' || v === '#FFFFFF') el.setAttribute(attr, '#1A1A1A');
+        });
+      });
+      const name = wrap.dataset.name;
+      if (name) clone.setAttribute('id', name);
+      const code = new XMLSerializer().serializeToString(clone);
+      copyText(code).then(() => {
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 1800);
+      });
+    });
+  });
+</script>
+</body>
+</html>
