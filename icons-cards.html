@@ -745,8 +745,9 @@
   }
 
   async function geminiChat(userText, apiKey) {
-    // Список без суффикса -latest (в v1beta больше не поддерживается). Порядок: новее → стабильнее.
-    const models = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro'];
+    // Актуальные id для generateContent (см. https://ai.google.dev/gemini-api/docs/models/gemini ).
+    // 1.5.x и суффикс -latest в AI Studio часто отключены; 2.0 Flash помечен deprecated.
+    const models = ['gemini-2.5-flash', 'gemini-3-flash-preview', 'gemini-3.1-flash-lite'];
     let lastErr = null;
     for (let m = 0; m < models.length; m++) {
       const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + models[m] + ':generateContent?key=' + encodeURIComponent(apiKey);
