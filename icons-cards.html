@@ -10,7 +10,7 @@
   body {
     background: #F0F0F0;
     font-family: 'Inter', sans-serif;
-    padding: 48px 32px;
+    padding: 0;
     min-height: 100vh;
   }
   .grid {
@@ -91,11 +91,165 @@
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     background: none;
   }
+
+  .app-shell { display: flex; align-items: stretch; min-height: 100vh; width: 100%; }
+  .main-area {
+    flex: 1;
+    min-width: 0;
+    padding: 48px 20px 48px 32px;
+  }
+  .chat-aside {
+    width: 340px;
+    flex-shrink: 0;
+    background: #fff;
+    border-left: 1px solid rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    height: 100vh;
+    max-height: 100vh;
+    box-shadow: -8px 0 24px rgba(0, 0, 0, 0.04);
+  }
+  .chat-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+    flex-shrink: 0;
+  }
+  .chat-title { font-size: 14px; font-weight: 600; color: #1A1A1A; }
+  .chat-settings-btn {
+    font: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    color: #555;
+    background: #F0F0F0;
+    border: 0;
+    border-radius: 8px;
+    padding: 6px 10px;
+    cursor: pointer;
+  }
+  .chat-settings-btn:hover { background: #E6E6E6; }
+  .chat-settings {
+    padding: 12px 16px 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+    font-size: 12px;
+    color: #444;
+    flex-shrink: 0;
+    max-height: 42vh;
+    overflow-y: auto;
+  }
+  .chat-field { display: block; margin-bottom: 10px; }
+  .chat-field span { display: block; margin-bottom: 4px; font-weight: 500; color: #333; }
+  .chat-field input, .chat-field select, .chat-field textarea {
+    width: 100%;
+    font: inherit;
+    font-size: 13px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: #FAFAFA;
+  }
+  .chat-hint { margin-top: 6px; line-height: 1.45; color: #666; }
+  .chat-hint a { color: #1A1A1A; }
+  .chat-save-btn {
+    margin-top: 10px;
+    width: 100%;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px;
+    border: 0;
+    border-radius: 10px;
+    background: #1A1A1A;
+    color: #fff;
+    cursor: pointer;
+  }
+  .chat-save-btn:hover { opacity: 0.92; }
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 0;
+  }
+  .chat-msg {
+    font-size: 13px;
+    line-height: 1.55;
+    padding: 10px 12px;
+    border-radius: 12px;
+    max-width: 100%;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .chat-msg.user { align-self: flex-end; background: #E8E8E8; color: #1A1A1A; }
+  .chat-msg.bot { align-self: stretch; background: #F5F5F5; border: 1px solid rgba(0, 0, 0, 0.06); }
+  .chat-msg.err { align-self: stretch; background: #FFF2F2; color: #7a1e1e; border: 1px solid rgba(200, 80, 80, 0.25); }
+  .chat-form {
+    padding: 12px 16px 16px;
+    border-top: 1px solid rgba(0, 0, 0, 0.07);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .chat-form textarea {
+    resize: vertical;
+    min-height: 44px;
+    max-height: 120px;
+    font: inherit;
+    font-size: 13px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: #FAFAFA;
+  }
+  .chat-form button[type="submit"] {
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 14px;
+    border: 0;
+    border-radius: 10px;
+    background: #1A1A1A;
+    color: #fff;
+    cursor: pointer;
+  }
+  .chat-form button[type="submit"]:disabled { opacity: 0.45; cursor: not-allowed; }
+  .generated-heading {
+    max-width: 1100px;
+    margin: 0 auto 16px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: #666;
+    text-transform: uppercase;
+  }
+  @media (max-width: 960px) {
+    .app-shell { flex-direction: column; }
+    .chat-aside {
+      width: 100%;
+      height: auto;
+      max-height: none;
+      position: relative;
+      border-left: 0;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+      box-shadow: none;
+    }
+    .chat-messages { max-height: 280px; }
+  }
 </style>
 </head>
 <body>
 <div class="copy-toast" id="toast">SVG скопирован</div>
-
+<div class="app-shell">
+<div class="main-area">
 <div class="grid">
 
   <!-- 1. Ровная поверхность — уровень filled -->
@@ -153,11 +307,11 @@
     <div class="card-desc">Равномерно распределяет тепло без пустот и перегревов</div>
   </div>
 
-  <!-- 6. 12 часов — Heroicons v2 «clock» solid (MIT) https://heroicons.com/ -->
+  <!-- 6. 12 часов — сапог: сплошной силуэт (custom path), без «штрихов» как у Carbon boot -->
   <div class="card">
-    <div class="icon-wrap" data-name="clock">
+    <div class="icon-wrap" data-name="boot-filled">
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path fill-rule="evenodd" clip-rule="evenodd" fill="#1A1A1A" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z"/>
+        <path fill="#1A1A1A" d="M4 22V10.5C4 7 6.5 4.5 9.8 4.5h2.4c3.2 0 5.8 2.5 5.8 5.7V12h2c2 0 3.5 1.5 3.5 3.5V22H4z"/>
       </svg>
     </div>
     <div class="card-title">Ходить можно уже через 12 часов</div>
@@ -395,7 +549,61 @@
 
 </div>
 
+<hr class="section-divider" role="presentation" aria-hidden="true">
+<p class="generated-heading" id="generated-heading" hidden>Сгенерировано чатом</p>
+<div class="grid" id="generated-cards"></div>
+
+</div>
+
+<aside class="chat-aside" id="chat-aside" aria-label="Помощник по карточкам">
+  <div class="chat-head">
+    <span class="chat-title">Чат</span>
+    <button type="button" class="chat-settings-btn" id="chat-settings-toggle" aria-expanded="false" aria-controls="chat-settings">Настройки ИИ</button>
+  </div>
+  <div class="chat-settings" id="chat-settings" hidden>
+    <p class="chat-hint" style="margin-bottom:10px">Ollama — бесплатное ПО; модель крутится у вас на компьютере. Со страницы GitHub Pages (HTTPS) запрос к <code>http://127.0.0.1</code> браузер обычно блокирует — укажите HTTPS-URL (например туннель к Ollama) или используйте Gemini.</p>
+    <label class="chat-field">
+      <span>Режим</span>
+      <select id="chat-provider">
+        <option value="gemini">Gemini (ключ из AI Studio)</option>
+        <option value="ollama">Ollama</option>
+      </select>
+    </label>
+    <div id="ollama-block">
+      <label class="chat-field"><span>Базовый URL Ollama</span><input type="url" id="ollama-url" placeholder="https://… или http://127.0.0.1:11434" autocomplete="off"></label>
+      <label class="chat-field"><span>Модель</span><input type="text" id="ollama-model" placeholder="llama3.2" autocomplete="off"></label>
+    </div>
+    <div id="gemini-block">
+      <label class="chat-field"><span>Ключ Gemini</span><input type="password" id="gemini-key" placeholder="AIza…" autocomplete="off"></label>
+      <p class="chat-hint">Бесплатный ключ: <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a>. Хранится только в вашем браузере.</p>
+    </div>
+    <button type="button" class="chat-save-btn" id="chat-save-settings">Сохранить в браузере</button>
+  </div>
+  <div class="chat-messages" id="chat-messages" role="log"></div>
+  <form class="chat-form" id="chat-form">
+    <textarea id="chat-input" rows="2" placeholder="Опишите тезисы — сгенерирую карточки и подставлю иконки (Heroicons через Iconify)…"></textarea>
+    <button type="submit" id="chat-send">Сгенерировать карточки</button>
+  </form>
+</aside>
+</div>
+
 <script>
+(function () {
+  const LS = {
+    provider: 'icons_cards_provider',
+    ollamaUrl: 'icons_cards_ollama_url',
+    ollamaModel: 'icons_cards_ollama_model',
+    geminiKey: 'icons_cards_gemini_key'
+  };
+
+  const SYSTEM = [
+    'Ты помощник для вёрстки карточек преимуществ (строительство, полусухая стяжка и т.п.).',
+    'По запросу пользователя верни ТОЛЬКО один JSON без Markdown и без пояснений до или после.',
+    'Формат: {"cards":[{"title":"краткий заголовок","desc":"1–2 предложения","icon":"имя-иконки"}]}',
+    'Поле icon — имя из набора Heroicons v2 (24px solid), в kebab-case: например bolt, shield-check, truck, clock, map-pin, square-3-stack-3d, funnel, speaker-wave.',
+    'Не больше 6 карточек за раз. Тексты на русском.'
+  ].join(' ');
+
   function copyText(text) {
     if (navigator.clipboard && location.protocol !== 'file:') {
       return navigator.clipboard.writeText(text);
@@ -410,33 +618,251 @@
     return Promise.resolve();
   }
 
-  document.querySelectorAll('.icon-wrap').forEach(wrap => {
-    wrap.addEventListener('click', () => {
-      const svg = wrap.querySelector('svg');
-      const clone = svg.cloneNode(true);
-      const vb = svg.viewBox.baseVal;
-      const pad = vb.width * 0.125;
-      clone.setAttribute('viewBox', `${vb.x - pad} ${vb.y - pad} ${vb.width + pad * 2} ${vb.height + pad * 2}`);
-      clone.setAttribute('width', '24');
-      clone.setAttribute('height', '24');
-      clone.querySelectorAll('*').forEach(el => {
-        ['fill', 'stroke'].forEach(attr => {
-          const v = el.getAttribute(attr);
-          if (!v) return;
-          if (v === '#1A1A1A' || v === '#1a1a1a') el.setAttribute(attr, 'white');
-          else if (v === 'white' || v === '#ffffff' || v === '#FFFFFF') el.setAttribute(attr, '#1A1A1A');
-        });
-      });
-      const name = wrap.dataset.name;
-      if (name) clone.setAttribute('id', name);
-      const code = new XMLSerializer().serializeToString(clone);
-      copyText(code).then(() => {
-        const toast = document.getElementById('toast');
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 1800);
+  document.body.addEventListener('click', function (e) {
+    const wrap = e.target.closest('.icon-wrap');
+    if (!wrap) return;
+    const svg = wrap.querySelector('svg');
+    if (!svg) return;
+    const clone = svg.cloneNode(true);
+    const vb = svg.viewBox.baseVal;
+    const pad = vb.width * 0.125;
+    clone.setAttribute('viewBox', `${vb.x - pad} ${vb.y - pad} ${vb.width + pad * 2} ${vb.height + pad * 2}`);
+    clone.setAttribute('width', '24');
+    clone.setAttribute('height', '24');
+    clone.querySelectorAll('*').forEach(function (el) {
+      ['fill', 'stroke'].forEach(function (attr) {
+        const v = el.getAttribute(attr);
+        if (!v) return;
+        if (v === '#1A1A1A' || v === '#1a1a1a') el.setAttribute(attr, 'white');
+        else if (v === 'white' || v === '#ffffff' || v === '#FFFFFF') el.setAttribute(attr, '#1A1A1A');
       });
     });
+    const name = wrap.dataset.name;
+    if (name) clone.setAttribute('id', name);
+    const code = new XMLSerializer().serializeToString(clone);
+    copyText(code).then(function () {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(function () { toast.classList.remove('show'); }, 1800);
+    });
   });
+
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function escapeAttr(s) {
+    return escapeHtml(s).replace(/'/g, '&#39;');
+  }
+
+  function pushMsg(text, cls) {
+    const el = document.createElement('div');
+    el.className = 'chat-msg ' + cls;
+    el.textContent = text;
+    document.getElementById('chat-messages').appendChild(el);
+    el.scrollIntoView({ block: 'end', behavior: 'smooth' });
+    return el;
+  }
+
+  function extractJsonObject(text) {
+    const fence = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
+    if (fence) {
+      try { return JSON.parse(fence[1].trim()); } catch (err) { /* continue */ }
+    }
+    const start = text.indexOf('{');
+    if (start === -1) return null;
+    let depth = 0;
+    for (let i = start; i < text.length; i++) {
+      const c = text[i];
+      if (c === '{') depth++;
+      else if (c === '}') {
+        depth--;
+        if (depth === 0) {
+          const slice = text.slice(start, i + 1);
+          try { return JSON.parse(slice); } catch (err) { return null; }
+        }
+      }
+    }
+    return null;
+  }
+
+  function normalizeIconSlug(raw) {
+    return String(raw || 'sparkles')
+      .trim()
+      .toLowerCase()
+      .replace(/_/g, '-')
+      .replace(/[^a-z0-9-]/g, '');
+  }
+
+  async function fetchIconSvg(slug) {
+    const name = normalizeIconSlug(slug) || 'sparkles';
+    const tries = [
+      'https://api.iconify.design/heroicons/solid/' + encodeURIComponent(name) + '.svg',
+      'https://api.iconify.design/heroicons/outline/' + encodeURIComponent(name) + '.svg',
+      'https://api.iconify.design/mdi/' + encodeURIComponent(name) + '.svg'
+    ];
+    for (let i = 0; i < tries.length; i++) {
+      const r = await fetch(tries[i]);
+      if (!r.ok) continue;
+      let txt = await r.text();
+      txt = txt.replace(/currentColor/gi, '#1A1A1A');
+      const doc = new DOMParser().parseFromString(txt, 'image/svg+xml');
+      const svg = doc.querySelector('svg');
+      if (!svg) continue;
+      if (!svg.getAttribute('xmlns')) svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+      svg.setAttribute('aria-hidden', 'true');
+      return { html: svg.outerHTML, slug: name };
+    }
+    const fallback = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="#1A1A1A" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"/></svg>';
+    return { html: fallback, slug: name };
+  }
+
+  async function ollamaChat(userText, base, model) {
+    const url = base.replace(/\/+$/, '') + '/api/chat';
+    const r = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: model || 'llama3.2',
+        messages: [
+          { role: 'system', content: SYSTEM },
+          { role: 'user', content: userText }
+        ],
+        stream: false
+      })
+    });
+    const data = await r.json().catch(function () { return {}; });
+    if (!r.ok) {
+      const e = data.error;
+      const err = typeof e === 'string' ? e : (e && e.message) || data.message || r.statusText;
+      throw new Error(err || 'Ollama error');
+    }
+    return (data.message && data.message.content) || '';
+  }
+
+  async function geminiChat(userText, apiKey) {
+    const models = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-flash-latest'];
+    let lastErr = null;
+    for (let m = 0; m < models.length; m++) {
+      const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + models[m] + ':generateContent?key=' + encodeURIComponent(apiKey);
+      const r = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          systemInstruction: { parts: [{ text: SYSTEM }] },
+          contents: [{ role: 'user', parts: [{ text: userText }] }],
+          generationConfig: { temperature: 0.35, maxOutputTokens: 8192 }
+        })
+      });
+      const data = await r.json().catch(function () { return {}; });
+      if (!r.ok) {
+        lastErr = (data.error && data.error.message) || r.statusText;
+        continue;
+      }
+      const parts = data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts;
+      if (!parts || !parts.length) {
+        lastErr = 'Пустой ответ Gemini';
+        continue;
+      }
+      return parts.map(function (p) { return p.text || ''; }).join('');
+    }
+    throw new Error(lastErr || 'Gemini error');
+  }
+
+  async function runModel(userText) {
+    const provider = localStorage.getItem(LS.provider) || 'gemini';
+    if (provider === 'ollama') {
+      const base = localStorage.getItem(LS.ollamaUrl) || 'http://127.0.0.1:11434';
+      const model = localStorage.getItem(LS.ollamaModel) || 'llama3.2';
+      return ollamaChat(userText, base, model);
+    }
+    const key = localStorage.getItem(LS.geminiKey) || '';
+    if (!key.trim()) throw new Error('Укажите ключ Gemini в настройках и нажмите «Сохранить».');
+    return geminiChat(userText, key.trim());
+  }
+
+  function loadSettingsIntoForm() {
+    document.getElementById('chat-provider').value = localStorage.getItem(LS.provider) || 'gemini';
+    document.getElementById('ollama-url').value = localStorage.getItem(LS.ollamaUrl) || 'http://127.0.0.1:11434';
+    document.getElementById('ollama-model').value = localStorage.getItem(LS.ollamaModel) || 'llama3.2';
+    document.getElementById('gemini-key').value = localStorage.getItem(LS.geminiKey) || '';
+    syncProviderBlocks();
+  }
+
+  function syncProviderBlocks() {
+    const p = document.getElementById('chat-provider').value;
+    document.getElementById('ollama-block').style.display = p === 'ollama' ? 'block' : 'none';
+    document.getElementById('gemini-block').style.display = p === 'gemini' ? 'block' : 'none';
+  }
+
+  function saveSettings() {
+    localStorage.setItem(LS.provider, document.getElementById('chat-provider').value);
+    localStorage.setItem(LS.ollamaUrl, document.getElementById('ollama-url').value.trim() || 'http://127.0.0.1:11434');
+    localStorage.setItem(LS.ollamaModel, document.getElementById('ollama-model').value.trim() || 'llama3.2');
+    localStorage.setItem(LS.geminiKey, document.getElementById('gemini-key').value);
+    pushMsg('Настройки сохранены в этом браузере.', 'bot');
+  }
+
+  document.getElementById('chat-settings-toggle').addEventListener('click', function () {
+    const panel = document.getElementById('chat-settings');
+    const open = panel.hidden;
+    panel.hidden = !open;
+    this.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+
+  document.getElementById('chat-provider').addEventListener('change', syncProviderBlocks);
+
+  document.getElementById('chat-save-settings').addEventListener('click', saveSettings);
+
+  document.getElementById('chat-form').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const input = document.getElementById('chat-input');
+    const btn = document.getElementById('chat-send');
+    const text = input.value.trim();
+    if (!text) return;
+    btn.disabled = true;
+    pushMsg(text, 'user');
+    input.value = '';
+    let replyEl = null;
+    try {
+      const raw = await runModel(text);
+      replyEl = pushMsg(raw, 'bot');
+      const data = extractJsonObject(raw);
+      if (!data || !Array.isArray(data.cards)) {
+        throw new Error('В ответе нет JSON с полем cards. Попробуйте ещё раз или смените модель.');
+      }
+      const grid = document.getElementById('generated-cards');
+      const heading = document.getElementById('generated-heading');
+      heading.hidden = false;
+      for (let i = 0; i < data.cards.length; i++) {
+        const c = data.cards[i];
+        const title = (c.title != null ? String(c.title) : '').trim();
+        const desc = (c.desc != null ? String(c.desc) : '').trim();
+        const icon = await fetchIconSvg(c.icon);
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML =
+          '<div class="icon-wrap" data-name="' + escapeAttr(icon.slug) + '">' + icon.html + '</div>' +
+          '<div class="card-title">' + escapeHtml(title) + '</div>' +
+          '<div class="card-desc">' + escapeHtml(desc) + '</div>';
+        grid.appendChild(card);
+      }
+      pushMsg('Карточки добавлены в блок «Сгенерировано чатом» слева.', 'bot');
+    } catch (err) {
+      if (replyEl && replyEl.parentNode) replyEl.remove();
+      pushMsg(err.message || String(err), 'err');
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  loadSettingsIntoForm();
+  pushMsg('Привет. Настройте режим (Gemini или Ollama), сохраните — затем опишите тезисы для новых карточек.', 'bot');
+})();
 </script>
 </body>
 </html>
